@@ -1,0 +1,62 @@
+from requests import get
+from threading import Thread
+from fake_headers import Headers
+from time import sleep
+from telebot import TeleBot
+
+
+
+# checker = ProxyChecker()
+headers = Headers(headers=True)
+proxies = set()
+bot = TeleBot("")
+with open("proxy.txt") as file:
+    for line in file:
+        proxies.add(line.strip())
+proxies.remove("")
+# get = scraper.get
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    RESET = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+f = open("good.txt", 'ab+')
+
+
+def try_proxy(proxy, id):
+    try:
+        proxies = {'http': f'http://{proxy.replace("http://", "")}', 'https': f'http://{proxy.replace("http://", "")}'}
+        get("https://api.ipify.org", proxies=proxies, headers=headers.generate()).text
+        print(f'{bcolors.BOLD + bcolors.OKGREEN + proxy.replace("http://", "")} - HTTP')
+        f.write("http://" + proxy.replace("http://", "") + "\n".encode())
+    except: 
+        try:
+            proxies = {'http': f'https://{proxy.replace("http://", "")}', 'https': f'https://{proxy.replace("http://", "")}'}
+            get("https://api.ipify.org", proxies=proxies, headers=headers.generate()).text
+            print(f'{bcolors.BOLD + bcolors.OKGREEN + proxy.replace("http://", "")} - HTTPS')
+            f.write("https://" + proxy.replace("http://", "") + "\n".encode())
+        except: 
+            try:
+                proxies = {'http': f'socks5 ://{proxy.replace("http://", "")}', 'https': f'http://{proxy.replace("http://", "")}'}
+                get("https://api.ipify.org", proxies=proxies, headers=headers.generate()).text
+                print(f'{bcolors.BOLD + bcolors.OKGREEN + proxy.replace("http://", "")} - SOCKS5')
+                f.write("socks5://" + proxy.replace("http://", "") + "\n".encode())
+            except:
+                print(f'{bcolors.BOLD + bcolors.FAIL + proxy.replace("http://", "")} - INVALID')
+    if id >= len(proxies):
+        sleep(10)
+        bot.send_document()
+
+
+
+
+count = 1
+for proxy in proxies:
+    # try_proxy(proxy, count)
+    Thread(target=try_proxy, args=(proxy, count)).start()
+    count += 1
