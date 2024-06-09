@@ -9,7 +9,7 @@ from telebot import TeleBot
 # checker = ProxyChecker()
 headers = Headers(headers=True)
 proxies = set()
-bot = TeleBot("")
+bot = TeleBot("7093667487:AAEBK00IkB3W3SW81b2bx7l879tFK-CitWo")
 with open("proxy.txt") as file:
     for line in file:
         proxies.add(line.strip())
@@ -26,6 +26,7 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 f = open("good.txt", 'ab+')
+
 
 
 def try_proxy(proxy, id):
@@ -49,8 +50,9 @@ def try_proxy(proxy, id):
             except:
                 print(f'{bcolors.BOLD + bcolors.FAIL + proxy.replace("http://", "")} - INVALID')
     if id >= len(proxies):
-        sleep(10)
-        bot.send_document()
+        sleep(60)
+        bot.send_document(6713279525, f.read(), caption="Ну короче вроде всё")
+
 
 
 
