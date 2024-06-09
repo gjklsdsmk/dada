@@ -25,6 +25,7 @@ class bcolors:
     RESET = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+open("good.txt", 'w').close()
 f = open("good.txt", 'ab+')
 
 
@@ -49,7 +50,7 @@ def try_proxy(proxy, id):
                 f.write("socks5://" + proxy.replace("http://", "") + "\n".encode())
             except:
                 print(f'{bcolors.BOLD + bcolors.FAIL + proxy.replace("http://", "")} - INVALID')
-    if id >= len(proxies):
+    if id == len(proxies):
         sleep(60)
         bot.send_document(6713279525, f.read(), caption="Ну короче вроде всё")
 
@@ -61,5 +62,5 @@ count = 1
 for proxy in proxies:
     # try_proxy(proxy, count)
     Thread(target=try_proxy, args=(proxy, count)).start()
-    sleep(0.05)
+    sleep(0.1)
     count += 1
