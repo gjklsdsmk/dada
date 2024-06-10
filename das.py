@@ -62,5 +62,5 @@ count = 1
 for proxy in proxies:
     # try_proxy(proxy, count)
     Thread(target=try_proxy, args=(proxy, count)).start()
-    sleep(0.1)
+    sleep(0.02)
     count += 1
